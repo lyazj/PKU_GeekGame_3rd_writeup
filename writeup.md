@@ -1107,3 +1107,101 @@ for i in range(len(t)): t[i] = crack.predict_getrandbits(32)
 t ^= d[624:]
 print(t.tobytes())
 ```
+
+
+
+## Dark Room
+
+比赛结束前约 1 小时，打开排行榜，发现排名跌到了二等奖最后一名，遂紧急补做一题改变排名。结合提示和题目给的源代码快速上手，制定了一个通关路线，尽量少经过原点减少扣分，且尽量经过可以加分的位置，并尽量获得可以加分的宝物。时间紧迫没有详细优化，但发现不使用 help 时我的路线已经可以做到 90% 生命值通关，那么再 help 三次，就有 $0.2^3 = 0.8\%$ 的概率每次净加 9 分，刚好可以通关。剩下就是诈骗分子常用的以数量搏概率的手段了。时间还剩不到 20 分钟，三秒刷一次应该还够。直接不断运行脚本手工暴刷，很幸运在比赛结束前 5 分钟左右通关了。
+
+```python
+#!/usr/bin/env python3
+
+import socket
+
+with open('escape.txt', 'rb') as ans:
+    ans = ans.readlines()
+off = 0
+while ans[off] != b'[answer]\n':
+    off += 1
+print(ans[off + 1 :])
+
+s = socket.socket()
+s.connect(('prob16.geekgame.pku.edu.cn', 10016))
+print(s.recv(8192))
+sock.send(b'<my-token-not-visible-to-otherone>\n')
+print(s.recv(8192))
+
+for a in ans:
+    s.send(a)
+    print(s.recv(8192))
+
+while True:
+    buf = s.recv(8192)
+    if not buf: break
+    print(buf)
+```
+
+上面代码中的 escape.txt 是紧急准备的通关笔记，内容如下：
+
+```
+[origin]
+eee	trinket
+nne	brass key
+ees	brass door
+nnww	gold door
+nnwws	flag room
+
+[brass]
+swwwn	gold key
+
+[gold]
+n	escape
+
+[answer]
+newgame
+lyazj
+y
+n
+n
+e
+pickup key
+w
+s
+s
+e
+e
+e
+pickup trinket
+use trinket
+w
+s
+usewith key door
+s
+s
+n
+w
+w
+w
+n
+pickup key
+s
+e
+e
+e
+n
+n
+w
+w
+n
+n
+w
+w
+usewith key door
+h
+h
+h
+n
+```
+
+结束了，吃饭。
